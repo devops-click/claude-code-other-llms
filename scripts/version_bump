@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+script_dir=$(dirname "$(realpath "$0")")
+VERSION_FILE="$script_dir/../VERSION"
+PACKAGE_FILE="$script_dir/../package.json"
+
+# Ensure both files exist
+if [ ! -f "$VERSION_FILE" ] || [ ! -f "$PACKAGE_FILE" ]; then
+  echo "Either VERSION file or package.json not found"
+  exit 1
+fi
+
+# Read the current version from VERSION file
+current_version=$(cat "$VERSION_FILE")
+IFS='.' read -r major minor patch <<< "$current_version"
+
+# Determine which version part to increase based on the argument (defaults to patch)
+INCREASE_VERSION=${1:-patch}
+
+case "$INCREASE_VERSION" in
+  major)
+    new_major=$((major + 1))
+    new_version="${new_major}.0.0"
+    ;;
+  minor)
+    new_minor=$((minor + 1))
+    new_version="${major}.${new_minor}.0"
+    ;;
+  patch)
+    new_patch=$((patch + 1))
+    new_version="${major}.${minor}.${new_patch}"
+    ;;
+  *)
+    echo "Invalid argument. Use 'major', 'minor', or 'patch'."
+    exit 1
+    ;;
+esac
+
+# Update the VERSION file
+echo "$new_version" > "$VERSION_FILE"
+echo "Updated VERSION file to: $new_version"
+
+# Check if jq is installed
+if ! command -v jq &> /dev/null; then
+  echo "jq is not installed. Please install jq to update package.json."
+  exit 1
+fi
+
+# Update package.json using jq
+jq --arg new_version "$new_version" '.version = $new_version' "$PACKAGE_FILE" > "$PACKAGE_FILE.tmp" && mv "$PACKAGE_FILE.tmp" "$PACKAGE_FILE"
+echo "Updated package.json version to: $new_version"
