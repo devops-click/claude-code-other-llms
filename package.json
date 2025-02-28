@@ -1,6 +1,6 @@
 {
   "name": "claude-code-other-llms",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Modify the ANTHROPIC_BASE_URL environment variable in order to switch the API endpoint used by Claude Code CLI.",
   "main": "app.js",
   "scripts": {
@@ -13,6 +13,6 @@
   "dependencies": {
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "openai": "^4.85.4"
+    "openai": "^4.86.1"
   }
 }

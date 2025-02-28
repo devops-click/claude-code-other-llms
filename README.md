@@ -2,6 +2,7 @@
 Claude Code adaptation for use with other LLM models such as OpenAI
 
 ## Usage
+
 1. Install Anthropic Claude Code using NPM:
    ```shell
    npm install -g @anthropic-ai/claude-code
@@ -37,7 +38,21 @@ Claude Code adaptation for use with other LLM models such as OpenAI
    ```
 8. Be happy ;)
 
-### Version Control
+## Docker Usage
+
+To run the app in a temporary Docker container, ensure Docker is installed and your environment variables (especially OPENAI_API_KEY) are set. Then execute:
+
+```shell
+./run_app_docker.sh [temp]
+```
+
+The script will:
+- Source environment variables from a .env file (if present)
+- Set up required parameters
+- Launch a Docker container mounting the repo, installing dependencies, and running the app
+
+## Version Control
+
 Call `scripts/version_bump` with the arguments [`major`|`minor`|`patch` (default)] to automatically update the version in `VERSION` and `package.json`. For example:
    ```shell
    scripts/version_bump minor
